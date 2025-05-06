@@ -2,7 +2,9 @@
 
 ## Commands run
 ```bash
-kubectl apply -f k8s-hackathon/part1/products-api.yml -f k8s-hackathon/part1/products-db.yml -f k8s-hackathon/part1/stock-api.yml -f k8s-hackathon/part1/web.yml
+git clone https://github.com/254Nicole-Nase/kubernetes-hackathon
+
+kubectl apply -f kubernetes-hackathon/part1/products-api.yml -f kubernetes-hackathon/part1/products-db.yml -f kubernetes-hackathon/part1/stock-api.yml -f kubernetes-hackathon/part1/web.yml
 
 kubectl get pods 
 
