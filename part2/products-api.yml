@@ -7,7 +7,7 @@ data:
   application.properties: |
     spring.datasource.url=jdbc:postgresql://products-db:5432/postgres
     spring.datasource.username=postgres
-    spring.datasource.password=widgetario
+    spring.datasource.password=${DB_PASSWORD}
 ---
 apiVersion: v1
 kind: Service
@@ -40,6 +40,13 @@ spec:
           image: widgetario/products-api:21.03
           ports:
             - containerPort: 80
+          
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_PASSWORD
 
           volumeMounts:
             - name: config-volume
