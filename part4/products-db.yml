@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-db
+spec:
+  selector:
+    app: products-db
+  ports:
+    - name: db
+      port: 5432
+      targetPort: 5432
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: products-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: products-db
+  template:
+    metadata:
+      labels:
+        app: products-db
+    spec:
+      containers:
+        - name: db
+          image: widgetario/products-db:postgres-replicated
+          ports:
+            - containerPort: 5432
+
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_PASSWORD
+            - name: REPLICATED_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: db-secret
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: db-data
+              mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+    - metadata:
+        name: db-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+data:
+  POSTGRES_PASSWORD: d2lkZ2V0YXJpbw==  
