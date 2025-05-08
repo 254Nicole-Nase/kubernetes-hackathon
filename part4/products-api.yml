@@ -1,0 +1,50 @@
+# products-api.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: products-api-config
+data:
+  application.properties: |
+    spring.datasource.url=jdbc:postgresql://products-db.default.svc.cluster.local:5432/postgres
+    spring.datasource.username=postgres
+    spring.datasource.password=widgetario
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: products-api
+spec:
+  selector:
+    app: products-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: products-api
+  template:
+    metadata:
+      labels:
+        app: products-api
+    spec:
+      containers:
+        - name: api
+          image: widgetario/products-api:21.03
+          ports:
+            - containerPort: 80
+          volumeMounts:
+            - name: config-volume
+              mountPath: /app/config/application.properties
+              subPath: application.properties
+      volumes:
+        - name: config-volume
+          configMap:
+            name: products-api-config 
