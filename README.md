@@ -17,8 +17,7 @@ Widgetario consists of the following services:
 ---
 
 ## 📂 Repository Structure
-## 📁 Repository Structure
-
+```bash
 kubernetes-hackathon/
 ├── part1/ # Basic Kubernetes manifests and service deployment
 ├── part2/ # ConfigMaps, Secrets, and environment variable setup
@@ -31,7 +30,7 @@ kubernetes-hackathon/
 ├── part7/ # Jenkins CI/CD pipeline configs
     ├── Jenkinsfile # Jenkins pipeline definition
 └── README.md # Project documentation
-
+```
 ---
 
 ## ⚙️ Prerequisites
